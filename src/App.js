@@ -1,10 +1,10 @@
-import AddToDo from './components/NewToDo';
+import NewToDo from './components/NewToDo';
 import ToDoList from './components/ToDoList';
 
 function App() {
   return (
-    <div className="">
-      <AddToDo />
+    <div className="bg-gray-200">
+      <NewToDo />
       <ToDoList />
     </div>
   );

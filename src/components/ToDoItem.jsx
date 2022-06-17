@@ -1,17 +1,24 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteToDo } from '../features/toDoSlice';
 
-const date = new Date().toISOString().slice(0, 10);
-
-const ToDoItem = () => {
+const ToDoItem = ({ item }) => {
+  const dispatch = useDispatch();
+  console.log('todoitem', item)
   return (
-    <li className="bg-gray-300">
-      <div className="mt-8 mx-8 p-4 rounded-lg">
-        <h1 className="text-lg">{date}</h1>
-        <p>item</p>
-        <p>item</p>
-        <p>item</p>
-      </div>
-    </li>
+    <>
+    <div className="flex justify-between my-5 px-4">
+      <p className='text-lg'>{item}</p>
+      <button
+        className="bg-blue-500 text-white px-2 py-2 rounded-lg"
+        type="submit"
+        onClick={() => dispatch(deleteToDo())}
+      >
+        Delete
+      </button>
+    </div>
+    <div className='border border-slate-100 w-12/12 mx-auto'></div>
+    </>
   );
 };
 
