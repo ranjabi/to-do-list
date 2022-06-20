@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 let initialState = [];
 
 try {
-  let state = JSON.parse(localStorage.getItem('ranjabi-todo'));
+  let state = JSON.parse(localStorage.getItem('todo'));
   if (state) {
     initialState = state;
     // console.log('localstorage');
@@ -61,12 +61,12 @@ export const toDoSlice = createSlice({
             });
             // console.log('masuk');
 
-            window.localStorage.setItem('ranjabi-todo', JSON.stringify(state));
+            window.localStorage.setItem('todo', JSON.stringify(state));
             return state;
           }
         }
       } else {
-        window.localStorage.setItem('ranjabi-todo', JSON.stringify(state));
+        window.localStorage.setItem('todo', JSON.stringify(state));
         return state.concat(newToDo);
       }
     },
@@ -86,7 +86,7 @@ export const toDoSlice = createSlice({
           items: e.items.filter((items) => items.id !== action.payload),
         };
       });
-      window.localStorage.setItem('ranjabi-todo', JSON.stringify(newState));
+      window.localStorage.setItem('todo', JSON.stringify(newState));
       return newState
     },
     // incrementByAmount(state, action) {
