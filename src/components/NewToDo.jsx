@@ -10,7 +10,7 @@ const NewToDo = () => {
 
   const inputHandler = (event) => {
     setInput(event.target.value);
-    console.log(input);
+    // console.log(input);
   };
 
   const dateNow = new Date().toISOString().slice(0, 10);

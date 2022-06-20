@@ -10,7 +10,7 @@ const ToDoList = () => {
     <div className="">
       <ul className="container mx-auto pt-4 pb-8">
         {todos.map((todo) => (
-          <ToDoContainer key={todo.date} date={todo.date} items={todo.items} />
+          todo.items.length > 0 ? <ToDoContainer key={todo.date} date={todo.date} items={todo.items} /> : null
         ))}
       </ul>
     </div>

@@ -1,24 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
-let initialState = [{date: '2022-06-16', items: ['makan']}]
+let initialState = [];
 
 try {
-  let state = JSON.parse(localStorage.getItem('todo'))
+  let state = JSON.parse(localStorage.getItem('ranjabi-todo'));
   if (state) {
-    initialState = state
-    console.log('localstorage');
-    
+    initialState = state;
+    // console.log('localstorage');
   }
 } catch (e) {
-  console.log(e)
+  // console.log(e);
 }
 
 const isExist = (date, todo) => {
-  if (todo.some(e => e.date === date)) {
-    return true
+  if (todo.some((e) => e.date === date)) {
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 // [
 //   {
@@ -44,40 +44,57 @@ export const toDoSlice = createSlice({
   initialState,
   reducers: {
     addToDo: (state, action) => {
-      let newDate = action.payload.date
-      let newItem = action.payload.items
+      let newDate = action.payload.date;
+      let newItem = action.payload.items;
       let newToDo = {
         date: newDate,
-        items: [newItem]
-      }
-      
+        items: [{ id: 'todo-' + nanoid(), task: newItem, completed: false }],
+      };
+
       if (isExist(newDate, state)) {
         for (let item of state) {
           if (item.date === newDate) {
-            item.items.push(newItem)
-            window.localStorage.setItem('todo', JSON.stringify(state))
-            return state
+            item.items.push({
+              id: 'todo-' + nanoid(),
+              task: newItem,
+              completed: false,
+            });
+            // console.log('masuk');
+
+            window.localStorage.setItem('ranjabi-todo', JSON.stringify(state));
+            return state;
           }
         }
-      } 
-      else {
-        window.localStorage.setItem('todo', JSON.stringify(state))
-        return state.concat(newToDo)
+      } else {
+        window.localStorage.setItem('ranjabi-todo', JSON.stringify(state));
+        return state.concat(newToDo);
       }
-      
-      
     },
-    deleteToDo: (state) => {
-      // do something
-      console.log('deleteToDo');
-      
+    editToDo: (state, action) => {
+      const editedToDo = state.map((task) => {
+        if (action.payload.id === task.id) {
+          return { ...task, name: action.payload.newName };
+        }
+        return task;
+      });
+      return editedToDo;
+    },
+    deleteToDo: (state, action) => {
+      let newState = state.map((e) => {
+        return {
+          ...e,
+          items: e.items.filter((items) => items.id !== action.payload),
+        };
+      });
+      window.localStorage.setItem('ranjabi-todo', JSON.stringify(newState));
+      return newState
     },
     // incrementByAmount(state, action) {
     //   state.value += action.payload
     // },
-  }
-})
+  },
+});
 
-export const { addToDo, deleteToDo } = toDoSlice.actions
+export const { addToDo, editToDo, deleteToDo } = toDoSlice.actions;
 
-export default toDoSlice.reducer
+export default toDoSlice.reducer;
