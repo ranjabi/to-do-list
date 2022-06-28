@@ -1,42 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
+import { createSlice, current } from '@reduxjs/toolkit'
+import { nanoid } from 'nanoid'
 
-let initialState = [];
+let initialState = []
 
 try {
-  let state = JSON.parse(localStorage.getItem('todo'));
+  let state = JSON.parse(localStorage.getItem('todo'))
   if (state) {
-    initialState = state;
+    initialState = state
     // console.log('localstorage');
   }
 } catch (e) {
-  // console.log(e);
+  console.log(e)
 }
-
-const isExist = (date, todo) => {
-  if (todo.some((e) => e.date === date)) {
-    return true;
-  }
-  return false;
-};
 
 // [
 //   {
-//     date:
-//     items: [
-//       1,
-//       2,
-//       3,
-//     ]
-//   },
-//   {
-//     date:
-//     items: [
-//       1,
-//       2,
-//       3,
-//     ]
-//   },
+//     id, date, task, completed
+//   }
 // ]
 
 export const toDoSlice = createSlice({
@@ -44,57 +24,50 @@ export const toDoSlice = createSlice({
   initialState,
   reducers: {
     addToDo: (state, action) => {
-      let newDate = action.payload.date;
-      let newItem = action.payload.items;
+      let newDate = action.payload.date
+      let newTask = action.payload.task // singular
       let newToDo = {
+        id: nanoid(),
         date: newDate,
-        items: [{ id: 'todo-' + nanoid(), task: newItem, completed: false }],
-      };
-
-      if (isExist(newDate, state)) {
-        for (let item of state) {
-          if (item.date === newDate) {
-            item.items.push({
-              id: 'todo-' + nanoid(),
-              task: newItem,
-              completed: false,
-            });
-            // console.log('masuk');
-
-            window.localStorage.setItem('todo', JSON.stringify(state));
-            return state;
-          }
-        }
-      } else {
-        window.localStorage.setItem('todo', JSON.stringify(state));
-        return state.concat(newToDo);
+        task: newTask,
+        completed: false,
       }
+
+      state.push(newToDo)
+      window.localStorage.setItem('todo', JSON.stringify(state))
+    },
+    finishToDo: (state, action) => {
+      const updatedTask = state.map(task => {
+        if (action.payload === task.id) {
+          console.log('id', task.id)
+          return {...task, completed: !task.completed}
+        }
+        return task
+      })
+      
+      window.localStorage.setItem('todo', JSON.stringify(updatedTask))
+      console.log(updatedTask)
+      return updatedTask
     },
     editToDo: (state, action) => {
       const editedToDo = state.map((task) => {
         if (action.payload.id === task.id) {
-          return { ...task, name: action.payload.newName };
+          return { ...task, task: action.payload.newTask }
         }
-        return task;
-      });
-      return editedToDo;
+        return task
+      })
+      window.localStorage.setItem('todo', JSON.stringify(editedToDo))
+      return editedToDo
     },
     deleteToDo: (state, action) => {
-      let newState = state.map((e) => {
-        return {
-          ...e,
-          items: e.items.filter((items) => items.id !== action.payload),
-        };
-      });
-      window.localStorage.setItem('todo', JSON.stringify(newState));
+      let newState = state.filter((e) => e.id !== action.payload)
+
+      window.localStorage.setItem('todo', JSON.stringify(newState))
       return newState
-    },
-    // incrementByAmount(state, action) {
-    //   state.value += action.payload
-    // },
+    }
   },
-});
+})
 
-export const { addToDo, editToDo, deleteToDo } = toDoSlice.actions;
+export const { addToDo, editToDo, deleteToDo, finishToDo } = toDoSlice.actions
 
-export default toDoSlice.reducer;
+export default toDoSlice.reducer

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.todo-btn {
-  @apply bg-blue-500 text-white px-3 py-2 ml-3 rounded-lg hover:opacity-80
+@layer components {
+  .task-btn {
+    @apply bg-blue-500 text-white px-3 py-2 mx-1 rounded-lg
+  }
 }
