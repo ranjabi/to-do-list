@@ -31,7 +31,7 @@ const ToDoItem = ({ id, task, completed }) => {
   return (
     <div className="">
       <div className="flex justify-between items-center py-2.5 px-4">
-        {isEditing ? <EditSection isEditing={isEditing} setEditing={setEditing} id={id} /> : <p className="text-lg w-full">{task}</p>}
+        {isEditing ? <EditSection isEditing={isEditing} setEditing={setEditing} id={id} /> : <p className="text-lg">{task}</p>}
         <div>
           {completed ? null : (
             <button
