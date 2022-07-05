@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import ToDoItem from './ToDoItem'
 
-const ToDoList = () => {
+const ToDoList = ({ filter, filterMap }) => {
   const todos = useSelector((state) => state.todo)
 
   return (
@@ -11,8 +11,7 @@ const ToDoList = () => {
       <div className="bg-white mt-6 px-4 py-8 rounded-xl w-8/12 mx-auto">
         {todos.length > 0 ? (
           <ul className="">
-            {/* {console.log(JSON.stringify(todos))} */}
-            {todos.map((todo) => (
+            {todos.filter(filterMap[filter]).map((todo) => (
               <ToDoItem
                 key={todo.id}
                 task={todo.task}
